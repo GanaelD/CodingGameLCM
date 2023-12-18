@@ -6,6 +6,10 @@ static void Main(string[] args)
         while (true)
         {
             int mana = 0;
+            List<Card> hand = new List<Card>();
+            List<Card> myBoard = new List<Card>();
+            List<Card> hisBoard = new List<Card>();
+    Player.actions = "";
             for (int i = 0; i < 2; i++)
             {
                 inputs = Console.ReadLine().Split(' ');
@@ -38,16 +42,34 @@ static void Main(string[] args)
                 int myHealthChange = int.Parse(inputs[8]);
                 int opponentHealthChange = int.Parse(inputs[9]);
                 int cardDraw = int.Parse(inputs[10]);
+                Card card = new Card(cardNumber, instanceId, location, cardType, cost, attack, defense, abilities);
+                if(card.location==0)
+                {
+                    hand.Add(card);
+                }else if(location==1)
+                {
+                    myBoard.Add(card);
+                }else 
+                {
+                    hisBoard.Add(card);
+                }
             }
 
             // Write an action using Console.WriteLine()
             // To debug: Console.Error.WriteLine("Debug messages...");
 
             if(mana==0){
-                Draft();
+                Console.Error.WriteLine("draft if");
+                Draft(hand);
             }else{
-                Summon();
-                Fight();
+                Summon(hand, myBoard, hisBoard, mana);
+                Fight(hand, myBoard, hisBoard);
             }
+            if(actions == ""){
+                Console.WriteLine("PASS");
+            }else {
+                Console.WriteLine(actions);
+            }
+            Console.Error.WriteLine("end Turn");
         }
     }
