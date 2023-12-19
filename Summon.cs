@@ -1,6 +1,7 @@
 static void Summon(int mana)
     {
         int manaTemp = mana;
+        Console.Error.WriteLine(manaTemp);
         Console.Error.WriteLine("summon");
         foreach (Card card in hand)
         {

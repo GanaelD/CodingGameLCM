@@ -7,17 +7,28 @@ static void Draft(List<Card> draft)
         }
         else
         {
-            int cost = draft[0].cost;
+            int cost = 30;
             int indexChoice = 0;
+
             for(int i = 0; i<3; i++)
             {
-                if(draft[i].cost<cost)
+                if (draft[i].cost>7)
                 {
-                    cost = draft[i].cost;
+                    draft[i].cost = 7;
+                }
+                if(Player.curve[draft[i].cost]<cost)
+                {
+                    cost = Player.curve[draft[i].cost];
                     indexChoice = i;
                 }
             }
             Player.PickCard(indexChoice);
+            if(cost>7)
+            {
+                cost = 7;
+            }
+            Player.curve[draft[indexChoice].cost] += 1;
+            //Console.Error.WriteLine(cost + " : " + Player.curve[cost]);
         }
 
     }

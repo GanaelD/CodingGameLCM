@@ -9,13 +9,13 @@ static void Main(string[] args)
             hand.Clear();
             myBoard.Clear();
             hisBoard.Clear();
-            Player.actions = "";
+            actions = "";
             for (int i = 0; i < 2; i++)
             {
                 inputs = Console.ReadLine().Split(' ');
                 int playerHealth = int.Parse(inputs[0]);
                 int playerMana = int.Parse(inputs[1]);
-                mana = int.Parse(inputs[1]);
+                mana = i == 0 ? int.Parse(inputs[1]) : mana;
                 int playerDeck = int.Parse(inputs[2]);
                 int playerRune = int.Parse(inputs[3]);
                 int playerDraw = int.Parse(inputs[4]);
@@ -43,13 +43,13 @@ static void Main(string[] args)
                 int opponentHealthChange = int.Parse(inputs[9]);
                 int cardDraw = int.Parse(inputs[10]);
                 Card card = new Card(cardNumber, instanceId, location, cardType, cost, attack, defense, abilities);
-                if(card.location==0)
+                if (card.location==0)
                 {
                     hand.Add(card);
-                }else if(location==1)
+                } else if (location==1)
                 {
                     myBoard.Add(card);
-                }else 
+                } else 
                 {
                     hisBoard.Add(card);
                 }
@@ -67,7 +67,7 @@ static void Main(string[] args)
             }
             if(actions == ""){
                 Console.WriteLine("PASS");
-            }else {
+            } else {
                 Console.WriteLine(actions);
             }
             Console.Error.WriteLine("end Turn");

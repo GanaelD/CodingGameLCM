@@ -2,6 +2,7 @@
     static List<Card> myBoard = new List<Card>();
     static List<Card> hisBoard = new List<Card>();
     static string actions = "";
+    static int[] curve = new int[8];
     
     static void PickCard(int pick) {
         Console.Error.WriteLine("pick");
@@ -28,5 +29,28 @@
             Player.actions += $"USE {item.instanceId} -1;";
         } else {
             Player.actions += $"USE {item.instanceId} {target.instanceId};";
+            if(item.cardType == 1){
+            foreach(char ability in item.abilities.ToCharArray())
+            {
+                if(!target.abilities.Contains(ability))
+                {
+                    Console.Error.WriteLine(target.abilities);
+                    target.abilities += ability;
+                    Console.Error.WriteLine(target.abilities);
+                }
+            }
+        }else
+        {
+            foreach(char ability in item.abilities.ToCharArray())
+            {
+                if(target.abilities.Contains(ability))
+                {
+                    Console.Error.WriteLine(target.abilities);
+                    target.abilities = target.abilities.Replace(ability.ToString(), "-");
+                    Console.Error.WriteLine(target.abilities);
+                }
+            }
         }
+        }
+        
     }
