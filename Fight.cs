@@ -1,15 +1,16 @@
 static void Fight(List<Card> hand, List<Card> myBoard, List<Card> hisBoard)
     {
         Console.Error.WriteLine("fight");
-        Card guard = null;
-        for(int i=0;i<myBoard.Count;i++){
-            for(int j=0;j<hisBoard.Count;j++){
-                Console.Error.WriteLine(j);
-                if(hisBoard[j].abilities.Contains("G"))
+        foreach (Card myCard in myBoard)
+        {
+            Card guard = hisBoard.FirstOrDefault(card => card.abilities.Contains("G") && card.defense > 0);
+            if (myCard.attack > 0)
+            {
+                Player.AttackCard(myCard, guard);
+                if (guard != null)
                 {
-                    guard = hisBoard[j];
+                    guard.defense -= myCard.attack;
                 }
-            }
-            Player.AttackCard(myBoard[i], guard);
+            }  
         }
     }
