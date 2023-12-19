@@ -6,10 +6,10 @@ static void Main(string[] args)
         while (true)
         {
             int mana = 0;
-            List<Card> hand = new List<Card>();
-            List<Card> myBoard = new List<Card>();
-            List<Card> hisBoard = new List<Card>();
-    Player.actions = "";
+            hand.Clear();
+            myBoard.Clear();
+            hisBoard.Clear();
+            Player.actions = "";
             for (int i = 0; i < 2; i++)
             {
                 inputs = Console.ReadLine().Split(' ');
@@ -62,8 +62,8 @@ static void Main(string[] args)
                 Console.Error.WriteLine("draft if");
                 Draft(hand);
             }else{
-                Summon(hand, myBoard, hisBoard, mana);
-                Fight(hand, myBoard, hisBoard);
+                Summon(mana);
+                Fight();
             }
             if(actions == ""){
                 Console.WriteLine("PASS");
