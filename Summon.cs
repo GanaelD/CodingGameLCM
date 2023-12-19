@@ -1,31 +1,36 @@
-static void Summon(List<Card> hand, List<Card> myBoard, List<Card> hisBoard, int mana)
+static void Summon(int mana)
     {
         int manaTemp = mana;
         Console.Error.WriteLine("summon");
-        for(int i=0; i<hand.Count;i++)
+        foreach (Card card in hand)
         {
-            if(hand[i].cost<manaTemp)
+            if(card.cost<manaTemp)
             {
-                switch (hand[i].cardType) {
+                switch (card.cardType) {
                     case 0:
-                        Player.SummonCard(hand[i]);
-                        manaTemp -= hand[i].cost;
+                        // Case 0 represents creatures
+                        Player.SummonCard(card);
+                        myBoard.Add(card);
+                        manaTemp -= card.cost;
                         break;
                     case 1:
+                        // Case 1 represents green items
                         if (myBoard.Count > 0) {
-                            Player.UseItem(hand[i], myBoard[0]);
-                            manaTemp -= hand[i].cost;
+                            Player.UseItem(card, myBoard[0]);
+                            manaTemp -= card.cost;
                         }
                         break;
                     case 2:
+                        // Case 2 represents red items
                         if (hisBoard.Count > 0) {
-                            Player.UseItem(hand[i], hisBoard[0]);
-                            manaTemp -= hand[i].cost;
+                            Player.UseItem(card, hisBoard[0]);
+                            manaTemp -= card.cost;
                         }
                         break;
                     case 3:
-                        Player.UseItem(hand[i], null);
-                        manaTemp -= hand[i].cost;
+                        // Case 3 represents blue items
+                        Player.UseItem(card, null);
+                        manaTemp -= card.cost;
                         break;
                 }
             }
