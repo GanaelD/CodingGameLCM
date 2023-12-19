@@ -1,4 +1,8 @@
-static string actions = "";
+    static List<Card> hand = new List<Card>();
+    static List<Card> myBoard = new List<Card>();
+    static List<Card> hisBoard = new List<Card>();
+    static string actions = "";
+    
     static void PickCard(int pick) {
         Console.Error.WriteLine("pick");
         Player.actions += $"PICK {pick}";
