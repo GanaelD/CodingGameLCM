@@ -4,7 +4,7 @@ static void Summon(int mana)
         Console.Error.WriteLine("summon");
         foreach (Card card in hand)
         {
-            if(card.cost<manaTemp)
+            if (card.cost <= manaTemp)
             {
                 switch (card.cardType) {
                     case 0:
