@@ -17,3 +17,12 @@ static string actions = "";
             Player.actions += $"ATTACK {attacker.instanceId} {target.instanceId};";
         }
     }
+
+    static void UseItem(Card item, Card target) {
+        Console.Error.WriteLine("item");
+        if (target == null) { // A null target represents an item with no target
+            Player.actions += $"USE {item.instanceId} -1;";
+        } else {
+            Player.actions += $"USE {item.instanceId} {target.instanceId};";
+        }
+    }
