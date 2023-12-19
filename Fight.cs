@@ -1,4 +1,4 @@
-static void Fight(List<Card> hand, List<Card> myBoard, List<Card> hisBoard)
+static void Fight()
     {
         Console.Error.WriteLine("fight");
         foreach (Card myCard in myBoard)
