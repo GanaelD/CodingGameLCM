@@ -1,7 +1,6 @@
 static void Summon(int mana)
     {
         int manaTemp = mana;
-        Console.Error.WriteLine(manaTemp);
         Console.Error.WriteLine("summon");
         foreach (Card card in hand)
         {
@@ -12,6 +11,10 @@ static void Summon(int mana)
                         // Case 0 represents creatures
                         Player.SummonCard(card);
                         myBoard.Add(card);
+                        if(card.abilities.Contains("C"))
+                        {
+                            attackers.Add(card);
+                        }
                         manaTemp -= card.cost;
                         break;
                     case 1:
