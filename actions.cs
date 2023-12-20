@@ -23,7 +23,25 @@
             Player.actions += $"ATTACK {attacker.instanceId} -1;";
         } else {
             Player.actions += $"ATTACK {attacker.instanceId} {target.instanceId};";
+            if (target.abilities.Contains("W"))
+            {
+                // If the target has Ward, it takes no damage but loses Ward
+                target.abilities.Replace('W', '-');
+            } else {
+                target.defense = attacker.abilities.Contains('L')
+                    ? 0
+                    : target.defense - attacker.attack;
+            }
+            if (attacker.abilities.Contains('W'))
+            {
+                attacker.abilities.Replace('W', '-');
+            } else {
+                attacker.defense = target.abilities.Contains('L')
+                    ? 0
+                    : attacker.defense - target.attack;
+            }
         }
+        attackers.RemoveAll(attack => attack.instanceId == attacker.instanceId);
     }
 
     static void UseItem(Card item, Card target) {
