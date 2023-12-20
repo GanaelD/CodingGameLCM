@@ -49,6 +49,7 @@ static void Main(string[] args)
                 } else if (location==1)
                 {
                     myBoard.Add(card);
+                    attackers.Add(card);
                 } else 
                 {
                     hisBoard.Add(card);
@@ -63,7 +64,10 @@ static void Main(string[] args)
                 Draft(hand);
             }else{
                 Summon(mana);
-                Fight();
+                if(myBoard.Count>0)
+                {
+                    Fight();
+                }            
             }
             if(actions == ""){
                 Console.WriteLine("PASS");

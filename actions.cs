@@ -1,9 +1,12 @@
+    class Player
+{   
+    static string actions = "";
     static List<Card> hand = new List<Card>();
     static List<Card> myBoard = new List<Card>();
     static List<Card> hisBoard = new List<Card>();
-    static string actions = "";
+    static List<Card> attackers = new List<Card>();
     static int[] curve = new int[8];
-    
+
     static void PickCard(int pick) {
         Console.Error.WriteLine("pick");
         Player.actions += $"PICK {pick}";
@@ -29,28 +32,37 @@
             Player.actions += $"USE {item.instanceId} -1;";
         } else {
             Player.actions += $"USE {item.instanceId} {target.instanceId};";
-            if(item.cardType == 1){
-            foreach(char ability in item.abilities.ToCharArray())
+            if (item.cardType == 1) {
+                foreach (char ability in item.abilities)
+                {
+                    if (!target.abilities.Contains(ability))
+                    {
+                        Console.Error.WriteLine(target.abilities);
+                        target.abilities += ability;
+                        Console.Error.WriteLine(target.abilities);
+                    }
+                }
+                target.attack += item.attack;
+                target.defense += item.defense;
+            } else
             {
-                if(!target.abilities.Contains(ability))
+                foreach (char ability in item.abilities)
                 {
                     Console.Error.WriteLine(target.abilities);
-                    target.abilities += ability;
+                    target.abilities = target.abilities.Replace(ability, '-');
                     Console.Error.WriteLine(target.abilities);
                 }
-            }
-        }else
-        {
-            foreach(char ability in item.abilities.ToCharArray())
-            {
-                if(target.abilities.Contains(ability))
+                if (item.defense < 0) // This means the item inflicts damage
                 {
-                    Console.Error.WriteLine(target.abilities);
-                    target.abilities = target.abilities.Replace(ability.ToString(), "-");
-                    Console.Error.WriteLine(target.abilities);
+                    // If the targeted creature has Ward, it takes no damage but loses Ward
+                    if (target.abilities.Contains('W'))
+                    {
+                        target.abilities.Replace('W', '-');
+                    } else {
+                        target.defense += item.defense;
+                    }
+                    target.attack += item.attack;
                 }
             }
         }
-        }
-        
     }
