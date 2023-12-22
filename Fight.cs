@@ -1,47 +1,63 @@
+static void ScoreAttack(Card attacker, Card Attacked)
+    {
+        return 10;
+    }
+
 static void Fight()
     {
         Console.Error.WriteLine("fight");
         List<Card> provocs = hisBoard.Where(card => card.abilities.Contains('G')).ToList();
-        foreach (Card guard in provocs)
+        int maxScore = 0;
+        Card bestAttacker = new Card();
+        Card defender = new Card();
+        while(provocs.Count > 0 && attackers.Count > 0)
         {
-            List<Card> killers = attackers.Where(card => card.attack >= guard.defense
-                || card.abilities.Contains('L')).ToList();
-            Card attacker;
-            if (killers.Count > 0)
+            foreach (Card guard in provocs)
             {
-                attacker = killers.Aggregate(killers[0], (acc, cur) => cur.attack < acc.attack ? cur : acc);
-            } else {
-                attacker = myBoard[0];
-            }
-            foreach (Card myCard in attackers)
-            {
-                if (myCard.attack > guard.defense && myCard.attack < attacker.attack) 
-                {
-                    attacker = myCard;
+                foreach (Card attacker in attackers){
+                    if (ScoreAttack(attacker,guard)>maxScore)
+                    {
+                        maxScore=ScoreAttack(attacker,guard);
+                        bestAttacker = attacker;
+                        defender = guard;
+                    }
                 }
+            }
+            AttackCard(bestAttacker,defender);
+            provocs = hisBoard.Where(card => card.abilities.Contains('G')&&card.defense>0).ToList();
+        }
+
+        if(attackers.Sum(attacker => attacker.attack) >= pdv du mec)     //changer pour mettre les points de vie de l'adversaire
+        {
+            foreach(Card attacker in attackers)
+            {
+                AttackCard(attacker, null);
             }
         }
 
-        foreach (Card myCard in myBoard)
+        bestAttacker = new Card();
+        defender = new Card();
+        maxScore = 0;
+        while (attackers.Count > 0 && hisBoard.Count > 0)
         {
-            Card guard = hisBoard.FirstOrDefault(card => card.abilities.Contains("G") && card.defense > 0);
-            if (myCard.attack > 0)
+            foreach (Card attacker in attackers)
             {
-                Player.AttackCard(myCard, guard);
-                if (guard != null)
-                {
-                    if (guard.abilities.Contains("W"))
+                foreach (Card defend in hisBoard){
+                    if (ScoreAttack(attacker,defend)>maxScore)
                     {
-                        // If the target has Ward, it takes no damage but loses Ward
-                        guard.abilities.Replace('W', '-');
-
-                    } else {
-                        guard.defense = myCard.abilities.Contains('L')
-                            ? 0
-                            : guard.defense - myCard.attack;
+                        maxScore=ScoreAttack(attacker,defend);
+                        bestAttacker = attacker;
+                        defender = defend;
                     }
                 }
-
-            }  
+            }
+            AttackCard(bestAttacker,defender);
+        }
+        if(attacker.Count > 0)
+        {
+            foreach(Card attacker in attackers)
+            {
+                AttackCard(attacker, null);
+            }
         }
     }
