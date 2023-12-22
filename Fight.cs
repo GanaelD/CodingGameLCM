@@ -51,7 +51,14 @@ static void Fight()
                     }
                 }
             }
-            AttackCard(bestAttacker,defender);
+            if(maxScore>scorePalier)     //score palier à determiner
+            {
+                AttackCard(bestAttacker,defender);
+            }else
+            {
+                AttackCard(bestAttacker,null); 
+            }
+            
         }
         if(attacker.Count > 0)
         {
