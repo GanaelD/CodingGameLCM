@@ -1,7 +1,28 @@
 static void Fight()
+{
+    Console.Error.WriteLine("fight");
+    List<Card> provocs = hisBoard.Where(card => card.abilities.Contains('G')).ToList();
+
+    Card toxicityCard = myBoard.FirstOrDefault(card => card.abilities.Contains("L"));
+
+    if (toxicityCard != null)
     {
-        Console.Error.WriteLine("fight");
-        List<Card> provocs = hisBoard.Where(card => card.abilities.Contains('G')).ToList();
+        // Toxicity attack highest HP (at least 4 HP)
+        Card maxHpEnemie = hisBoard.Where(card => card.defense >= 4)
+            .OrderByDescending(card => card.defense)
+            .FirstOrDefault();
+
+        if (maxHpEnemie != null)
+        {
+            Player.AttackCard(toxicityCard, maxHpEnemie);
+        }
+        else
+        {
+            Player.AttackCard(toxicityCard, provocs.FirstOrDefault());
+        }
+    }
+    else
+    {
         foreach (Card guard in provocs)
         {
             List<Card> killers = attackers.Where(card => card.attack >= guard.defense
@@ -9,39 +30,39 @@ static void Fight()
             Card attacker;
             if (killers.Count > 0)
             {
+                
                 attacker = killers.Aggregate(killers[0], (acc, cur) => cur.attack < acc.attack ? cur : acc);
-            } else {
+            }
+            else
+            {
                 attacker = myBoard[0];
             }
-            foreach (Card myCard in attackers)
+            Player.AttackCard(attacker, guard);
+        }
+
+        foreach (Card myCard in attackers.ToList())
+        {
+            if (myCard.attack > 0)
             {
-                if (myCard.attack > guard.defense && myCard.attack < attacker.attack) 
+                if (provocs.Count > 0)
                 {
-                    attacker = myCard;
+                    Card guard = hisBoard.FirstOrDefault(card => card.abilities.Contains("G") && card.defense > 0);
+                    if (guard != null)
+                    {
+                        Player.AttackCard(myCard, guard);
+                    }
+                }
+                else
+                {
+                    Card maxHpEnemie = hisBoard.Where(card => card.defense >= 4)
+                        .OrderByDescending(card => card.defense)
+                        .FirstOrDefault();
+                    if (maxHpEnemie != null)
+                    {
+                        Player.AttackCard(myCard, maxHpEnemie);
+                    }
                 }
             }
         }
-
-        foreach (Card myCard in myBoard)
-        {
-            Card guard = hisBoard.FirstOrDefault(card => card.abilities.Contains("G") && card.defense > 0);
-            if (myCard.attack > 0)
-            {
-                Player.AttackCard(myCard, guard);
-                if (guard != null)
-                {
-                    if (guard.abilities.Contains("W"))
-                    {
-                        // If the target has Ward, it takes no damage but loses Ward
-                        guard.abilities.Replace('W', '-');
-
-                    } else {
-                        guard.defense = myCard.abilities.Contains('L')
-                            ? 0
-                            : guard.defense - myCard.attack;
-                    }
-                }
-
-            }  
-        }
     }
+}
