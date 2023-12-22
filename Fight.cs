@@ -1,7 +1,7 @@
 static int ScoreAttack(Card attacker, Card attacked)  //rajouter score si la créature adverse a bcp d'attaque
     {
         int score = 0;
-        if(attacker.attack > attacked.defense && !attacked.abilities.Contains('W'))
+        if(attacker.attack >= attacked.defense && !attacked.abilities.Contains('W'))
         {
             score += 10 + Math.Abs(attacked.attack - attacker.defense);
             if(attacker.abilities.Contains('B'))
@@ -26,12 +26,13 @@ static void Fight()
         Console.Error.WriteLine("fight");
         List<Card> provocs = hisBoard.Where(card => card.abilities.Contains('G')).ToList();
         int maxScore = 0;
-        Card bestAttacker = attackers[0];
+        Card bestAttacker;
         Card defender;
         while(provocs.Count > 0 && attackers.Count > 0)
         {
             defender = provocs[0];
             maxScore =0;
+            bestAttacker = attackers[0];
             foreach (Card guard in provocs)
             {
                 foreach (Card attacker in attackers){
@@ -53,9 +54,9 @@ static void Fight()
             provocs = hisBoard.Where(card => card.abilities.Contains('G')&&card.defense>0).ToList();
         }
 
-        if(attackers.Sum(attacker => attacker.attack) >= 30)     //changer pour mettre les points de vie de l'adversaire
+        if(attackers.Sum(attacker => attacker.attack) >= opponent.health)
         {
-            foreach(Card attacker in attackers)
+            foreach(Card attacker in attackers.ToList())
             {
                 AttackCard(attacker, null);
             }
@@ -80,7 +81,7 @@ static void Fight()
                     }
                 }
             }
-            if(maxScore>15)     //score palier à determiner
+            if(maxScore>13)     //score palier à determiner
             {
                 AttackCard(bestAttacker,defender);
             }else
